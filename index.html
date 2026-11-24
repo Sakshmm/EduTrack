@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="EduTrack helps students organise tasks, track progress, and stay focused on academic goals."
+    >
+    <meta name="theme-color" content="#16856B">
+
+    <title>EduTrack | Student Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">Edu<span>Track</span></h2>
+
+            <p class="menu-label">WORKSPACE</p>
+
+            <nav aria-label="Main navigation">
+                <a href="#dashboard" class="nav-link active" aria-current="page">
+                    ▦ Dashboard
+                </a>
+
+                <a href="#tasks" class="nav-link">
+                    ✓ My Tasks
+                </a>
+
+                <a href="#progress" class="nav-link">
+                    ↗ My Progress
+                </a>
+
+                <a href="#motivation" class="nav-link">
+                    ✦ Motivation
+                </a>
+            </nav>
+
+            <div class="sidebar-note">
+                <p>Small steps every day.</p>
+                <span>Keep learning. Keep growing.</span>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard -->
+        <main class="main-content" id="dashboard">
+
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">STUDENT WORKSPACE</p>
+                    <h1>My Dashboard</h1>
+                    <p class="subtitle">
+                        Plan your day. Make meaningful progress.
+                    </p>
+                </div>
+
+                <div class="profile" aria-label="Student profile">
+                    S
+                </div>
+            </header>
+
+            <!-- Welcome Banner -->
+            <section class="welcome-card">
+                <div>
+                    <p class="welcome-label">YOUR DAILY SPACE</p>
+                    <h2>Make today count.</h2>
+                    <p>One task at a time. You're getting closer.</p>
+                </div>
+
+                <div class="welcome-symbol" aria-hidden="true">✦</div>
+            </section>
+
+            <!-- Task Statistics -->
+            <section class="stats-grid" aria-label="Task statistics">
+
+                <article class="stat-card">
+                    <p>Total Tasks</p>
+                    <h2 id="totalTasks">0</h2>
+                    <span>All your tasks</span>
+                </article>
+
+                <article class="stat-card">
+                    <p>Completed</p>
+                    <h2 id="completedTasks">0</h2>
+                    <span>Tasks finished</span>
+                </article>
+
+                <article class="stat-card">
+                    <p>Pending</p>
+                    <h2 id="pendingTasks">0</h2>
+                    <span>Still in progress</span>
+                </article>
+
+            </section>
+
+            <!-- Main Content -->
+            <section class="content-grid">
+
+                <!-- Tasks Panel -->
+                <section class="panel task-panel" id="tasks">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h2>My Tasks</h2>
+                            <p>Keep your priorities organised.</p>
+                        </div>
+
+                        <span class="panel-icon" aria-hidden="true">✓</span>
+                    </div>
+
+                    <form id="taskForm" class="task-form">
+                        <input
+                            type="text"
+                            id="taskInput"
+                            placeholder="What do you need to do?"
+                            aria-label="Enter a new task"
+                            autocomplete="off"
+                            maxlength="150"
+                            required
+                        >
+
+                        <button type="submit" id="addTaskBtn">
+                            + Add Task
+                        </button>
+                    </form>
+
+                    <div class="task-toolbar">
+                        <input
+                            type="search"
+                            id="searchInput"
+                            placeholder="Search tasks..."
+                            aria-label="Search tasks"
+                        >
+
+                        <select id="taskFilter" aria-label="Filter tasks">
+                            <option value="all">All Tasks</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <ul id="taskList" class="task-list" aria-label="Your tasks"></ul>
+
+                    <p id="emptyMessage" class="empty-message" aria-live="polite">
+                        No tasks yet. Add your first task!
+                    </p>
+
+                </section>
+
+                <!-- Right Column -->
+                <div class="right-column">
+
+                    <!-- Progress Panel -->
+                    <section class="panel progress-panel" id="progress">
+                        <h2>Your Progress</h2>
+                        <p>Every completed task counts.</p>
+
+                        <div
+                            class="progress-track"
+                            role="progressbar"
+                            aria-label="Task completion progress"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="0"
+                            id="progressTrack"
+                        >
+                            <div
+                                id="progressBar"
+                                class="progress-fill"
+                            ></div>
+                        </div>
+
+                        <p id="progressText" class="progress-text">
+                            0% completed
+                        </p>
+                    </section>
+
+                    <!-- Motivation Panel -->
+                    <section
+                        class="panel motivation-panel"
+                        id="motivation"
+                    >
+                        <span class="quote-symbol" aria-hidden="true">“</span>
+
+                        <p class="eyebrow">A LITTLE INSPIRATION</p>
+
+                        <h2>Keep moving forward.</h2>
+
+                        <p id="quote" aria-live="polite">
+                            Your daily motivation is one click away.
+                        </p>
+
+                        <button
+                            type="button"
+                            id="quoteBtn"
+                            class="quote-button"
+                        >
+                            Get Daily Quote →
+                        </button>
+                    </section>
+
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer>
+                <p>EduTrack — Plan. Learn. Progress.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

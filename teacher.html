@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070B14">
+<title>EduTrack | Teacher Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg:#070B14;
+    --surface:#0F172A;
+    --surface2:#172238;
+    --green:#22C55E;
+    --green-soft:rgba(34,197,94,.12);
+    --text:#F8FAFC;
+    --muted:#94A3B8;
+    --border:#1E293B;
+    --red:#EF4444;
+    --yellow:#F59E0B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Outfit,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{min-height:100vh}
+.sidebar{
+    width:250px;position:fixed;inset:0 auto 0 0;
+    background:var(--surface);border-right:1px solid var(--border);
+    padding:28px 18px;display:flex;flex-direction:column;z-index:10
+}
+.logo{font-size:26px;font-weight:800;letter-spacing:-1px;margin:0 0 42px 8px}
+.logo span{color:var(--green)}
+.menu-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1.5px;margin:0 0 12px 10px}
+.nav{display:grid;gap:6px}
+.nav a{
+    display:flex;align-items:center;gap:12px;padding:13px 12px;
+    color:var(--muted);text-decoration:none;border-radius:10px;
+    font-size:14px;font-weight:600;transition:.2s
+}
+.nav a:hover,.nav a.active{background:var(--green-soft);color:var(--green)}
+.sidebar-bottom{margin-top:auto}
+.profile{display:flex;align-items:center;gap:11px;padding:15px 5px;border-top:1px solid var(--border)}
+.avatar{width:38px;height:38px;border-radius:12px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-weight:800}
+.profile small{color:var(--muted);display:block;font-size:11px}
+.logout{width:100%;background:#24151B;color:#F87171;padding:11px;border-radius:9px;font-weight:700}
+main{margin-left:250px;padding:34px 38px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:15px}
+.eyebrow{font-size:11px;color:var(--green);font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-size:29px;letter-spacing:-.7px;margin:5px 0}
+.subtitle{color:var(--muted);font-size:14px}
+.top-date{color:var(--muted);font-size:13px;background:var(--surface);padding:11px 15px;border:1px solid var(--border);border-radius:10px}
+.section{display:none}
+.section.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 16px;gap:12px}
+.section-head h2{font-size:19px}
+.section-head p{color:var(--muted);font-size:13px;margin-top:3px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.stat,.panel,.assignment-card,.submission-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:15px
+}
+.stat{padding:20px}
+.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+.stat-icon{width:34px;height:34px;border-radius:10px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-weight:800}
+.stat strong{display:block;font-size:29px;margin:13px 0 3px}
+.stat small{color:var(--muted);font-size:12px}
+.content-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:17px;margin-top:20px}
+.panel{padding:21px;min-width:0}
+.panel h3{font-size:16px;margin-bottom:5px}
+.panel-sub{font-size:12px;color:var(--muted);margin-bottom:17px}
+.btn{padding:10px 15px;border-radius:9px;font-weight:700;font-size:13px}
+.primary{background:var(--green);color:#05210F}
+.primary:hover{background:#4ADE80}
+.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.danger{background:#32191F;color:#FCA5A5}
+input,textarea,select{
+    width:100%;background:#080F1E;border:1px solid var(--border);
+    color:var(--text);border-radius:9px;padding:12px;outline:none
+}
+input:focus,textarea:focus,select:focus{border-color:var(--green)}
+textarea{resize:vertical;min-height:100px}
+label{display:block;font-size:12px;color:var(--muted);margin:13px 0 7px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.assignment-list,.submission-list{display:grid;gap:12px}
+.assignment-card,.submission-card{padding:17px}
+.card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.card-title{font-weight:700;font-size:15px}
+.muted{color:var(--muted);font-size:12px;line-height:1.6;margin-top:6px}
+.pill{font-size:10px;padding:5px 9px;border-radius:20px;background:var(--green-soft);color:var(--green);white-space:nowrap}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.card-actions button{font-size:12px}
+.empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--border);border-radius:12px}
+.message{font-size:13px;margin-top:12px;color:var(--muted)}
+.message.success{color:var(--green)}
+.message.error{color:#F87171}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600}
+td{color:#E2E8F0}
+.progress{height:7px;background:var(--surface2);border-radius:20px;overflow:hidden;margin-top:9px}
+.progress div{height:100%;background:var(--green);border-radius:20px}
+.review-box{margin-top:13px;display:grid;gap:9px}
+.review-box textarea{min-height:75px}
+.search-row{display:flex;gap:10px;margin-bottom:15px}
+.search-row input{max-width:320px}
+.mobile-menu{display:none}
+@media(max-width:1000px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .content-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+    .sidebar{width: min(270px,85vw);transform:translateX(-100%);transition:.25s}
+    .sidebar.open{transform:translateX(0)}
+    main{margin-left:0;padding:22px 16px}
+    .mobile-menu{display:inline-flex}
+    .topbar{align-items:flex-start}
+    .top-date{display:none}
+    .stats{grid-template-columns:1fr 1fr;gap:10px}
+    .stat{padding:14px}
+    .stat strong{font-size:24px}
+    .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+    <div class="logo">Edu<span>Track</span></div>
+    <div class="menu-label">TEACHER WORKSPACE</div>
+    <nav class="nav">
+        <a href="#overview" class="active" data-page="overview">▦ &nbsp; Overview</a>
+        <a href="#assignments" data-page="assignments">▤ &nbsp; Assignments</a>
+        <a href="#submissions" data-page="submissions">⇧ &nbsp; Submissions</a>
+        <a href="#analytics" data-page="analytics">▥ &nbsp; Analytics</a>
+        <a href="#similarity" data-page="similarity">◎ &nbsp; Similarity Checker</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="profile">
+            <div class="avatar" id="avatar">T</div>
+            <div><strong id="profileName">Teacher</strong><small>Teacher Account</small></div>
+        </div>
+        <button class="logout" id="logoutButton">↪ &nbsp; Logout</button>
+    </div>
+</aside>
+
+<main>
+    <header class="topbar">
+        <div>
+            <button class="btn secondary mobile-menu" id="menuButton">☰</button>
+            <div class="eyebrow">Teacher workspace</div>
+            <h1 id="welcome">Welcome back</h1>
+            <p class="subtitle">Manage assignments and review student progress.</p>
+        </div>
+        <div class="top-date" id="todayDate"></div>
+    </header>
+
+    <section class="section active" id="overview">
+        <div class="stats">
+            <div class="stat"><div class="stat-top">Total Assignments <span class="stat-icon">▤</span></div><strong id="totalAssignments">0</strong><small>Assignments created by you</small></div>
+            <div class="stat"><div class="stat-top">Total Students <span class="stat-icon">♙</span></div><strong id="totalStudents">0</strong><small>Registered students</small></div>
+            <div class="stat"><div class="stat-top">Submissions <span class="stat-icon">⇧</span></div><strong id="totalSubmissions">0</strong><small>Received submissions</small></div>
+            <div class="stat"><div class="stat-top">Pending Submissions <span class="stat-icon">◷</span></div><strong id="pendingSubmissions">0</strong><small>Awaiting student submission</small></div>
+        </div>
+
+        <div class="content-grid">
+            <div class="panel">
+                <h3>Assignment Overview</h3>
+                <p class="panel-sub">Submission progress across your assignments</p>
+                <div id="overviewAssignments" class="assignment-list"><div class="empty">Loading assignments...</div></div>
+            </div>
+            <div class="panel">
+                <h3>Quick Actions</h3>
+                <p class="panel-sub">Manage your classroom</p>
+                <button class="btn primary" style="width:100%" onclick="showPage('assignments')">＋ Create Assignment</button>
+                <button class="btn secondary" style="width:100%;margin-top:10px" onclick="showPage('submissions')">Review Submissions</button>
+                <button class="btn secondary" style="width:100%;margin-top:10px" onclick="showPage('analytics')">View Analytics</button>
+                <p class="message" id="overviewMessage"></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="assignments">
+        <div class="section-head">
+            <div><h2>Assignment Management</h2><p>Create and manage your assignments.</p></div>
+        </div>
+        <div class="content-grid">
+            <div class="panel">
+                <h3>Create New Assignment</h3>
+                <p class="panel-sub">Share a new task with students</p>
+                <form id="assignmentForm">
+                    <label for="assignmentTitle">Assignment title</label>
+                    <input id="assignmentTitle" maxlength="160" required placeholder="e.g. Data Structures Project">
+                    <label for="assignmentDescription">Description</label>
+                    <textarea id="assignmentDescription" maxlength="2000" placeholder="Add instructions for students..."></textarea>
+                    <label for="dueDate">Due date</label>
+                    <input type="date" id="dueDate">
+                    <button class="btn primary" style="margin-top:16px" type="submit">＋ Create Assignment</button>
+                    <p class="message" id="createMessage"></p>
+                </form>
+            </div>
+            <div class="panel">
+                <h3>Assignment Summary</h3>
+                <p class="panel-sub">Your current assignment count</p>
+                <strong id="assignmentCount" style="font-size:38px">0</strong>
+                <p class="muted">Total assignments created</p>
+                <div style="margin-top:20px">
+                    <button class="btn secondary" onclick="loadAssignments()">↻ Refresh Assignments</button>
+                </div>
+            </div>
+        </div>
+        <div class="section-head"><div><h2>Your Assignments</h2><p>Open an assignment to review submissions.</p></div></div>
+        <div id="assignmentList" class="assignment-list"><div class="empty">Loading...</div></div>
+    </section>
+
+    <section class="section" id="submissions">
+        <div class="section-head"><div><h2>Student Submissions</h2><p>Select an assignment to view and review its submissions.</p></div></div>
+        <div class="panel">
+            <label for="submissionAssignment">Select assignment</label>
+            <select id="submissionAssignment"><option value="">Choose an assignment</option></select>
+            <p class="message" id="submissionMessage"></p>
+        </div>
+        <div class="section-head"><div><h2>Submitted Work</h2><p>Download files and provide feedback.</p></div></div>
+        <div id="submissionList" class="submission-list"><div class="empty">Select an assignment to see submissions.</div></div>
+    </section>
+
+    <section class="section" id="analytics">
+        <div class="section-head"><div><h2>Classroom Analytics</h2><p>Monitor assignment completion and student activity.</p></div><button class="btn secondary" onclick="loadAnalytics()">↻ Refresh</button></div>
+        <div class="stats">
+            <div class="stat"><div class="stat-top">Completion Rate</div><strong id="completionRate">0%</strong><small>Overall submission rate</small></div>
+            <div class="stat"><div class="stat-top">Assignments</div><strong id="analyticsAssignments">0</strong><small>Your assignments</small></div>
+            <div class="stat"><div class="stat-top">Submissions</div><strong id="analyticsSubmissions">0</strong><small>Received work</small></div>
+            <div class="stat"><div class="stat-top">Pending</div><strong id="analyticsPending">0</strong><small>Not yet submitted</small></div>
+        </div>
+        <div class="panel" style="margin-top:18px">
+            <h3>Assignment Performance</h3>
+            <p class="panel-sub">Submission count and pending work by assignment</p>
+            <div class="table-wrap">
+                <table><thead><tr><th>Assignment</th><th>Submissions</th><th>Pending</th><th>Feedback Given</th></tr></thead>
+                <tbody id="analyticsTable"><tr><td colspan="4">Loading analytics...</td></tr></tbody></table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="similarity">
+        <div class="section-head"><div><h2>Similarity Checker</h2><p>Compare extracted text from student submissions.</p></div></div>
+        <div class="panel">
+            <label for="similarityAssignment">Select assignment</label>
+            <select id="similarityAssignment"><option value="">Choose an assignment</option></select>
+            <button class="btn primary" style="margin-top:14px" id="checkSimilarity">Check Similarity</button>
+            <p class="message" id="similarityMessage"></p>
+        </div>
+        <div class="panel" style="margin-top:17px">
+            <h3>Comparison Results</h3>
+            <p class="panel-sub">Text-overlap indicators between submissions</p>
+            <div id="similarityResults" class="submission-list"><div class="empty">Choose an assignment to begin.</div></div>
+        </div>
+    </section>
+</main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let assignments = [];
+
+async function api(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            ...(options.body instanceof FormData ? {} : {"Content-Type":"application/json"}),
+            ...(options.headers || {})
+        }
+    });
+
+    if (!response.ok) {
+        let message = "Something went wrong.";
+        try {
+            const data = await response.json();
+            message = data.message || message;
+        } catch {}
+        if (response.status === 401) location.replace("/login.html");
+        throw new Error(message);
+    }
+    return response.json();
+}
+
+function showPage(page) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("active",a.dataset.page===page));
+    $(page).classList.add("active");
+    $("sidebar").classList.remove("open");
+    if(page==="analytics") loadAnalytics();
+    if(page==="assignments") loadAssignments();
+}
+
+document.querySelectorAll(".nav a").forEach(link => {
+    link.addEventListener("click", e => {
+        e.preventDefault();
+        showPage(link.dataset.page);
+    });
+});
+
+$("menuButton").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+$("todayDate").textContent = new Date().toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+
+function dateFormat(value) {
+    if(!value) return "No due date";
+    const d=new Date(value);
+    return Number.isNaN(d.getTime()) ? "No due date" : d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+}
+
+function makeText(tag,className,value) {
+    const el=document.createElement(tag);
+    el.className=className;
+    el.textContent=value ?? "";
+    return el;
+}
+
+async function initialise() {
+    try {
+        const data=await api("/api/me");
+        if(!data.user || data.user.role!=="teacher") {
+            location.replace("/login.html");
+            return;
+        }
+        const name=data.user.name || "Teacher";
+        $("welcome").textContent=`Welcome back, ${name}`;
+        $("profileName").textContent=name;
+        $("avatar").textContent=name.charAt(0).toUpperCase();
+
+        await Promise.allSettled([loadAssignments(),loadAnalytics()]);
+    } catch(error) {
+        console.error(error);
+        location.replace("/login.html");
+    }
+}
+
+$("assignmentForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const button=e.submitter;
+    button.disabled=true;
+    $("createMessage").className="message";
+    $("createMessage").textContent="Creating assignment...";
+
+    try {
+        const body={
+            title:$("assignmentTitle").value.trim(),
+            description:$("assignmentDescription").value.trim(),
+            dueDate:$("dueDate").value || null
+        };
+        const result=await api("/api/assignments",{
+            method:"POST",body:JSON.stringify(body)
+        });
+        $("createMessage").className="message success";
+        $("createMessage").textContent=result.message || "Assignment created successfully.";
+        $("assignmentForm").reset();
+        await Promise.allSettled([loadAssignments(),loadAnalytics()]);
+    } catch(error) {
+        $("createMessage").className="message error";
+        $("createMessage").textContent=error.message;
+    } finally {
+        button.disabled=false;
+    }
+});
+
+async function loadAssignments() {
+    try {
+        const data=await api("/api/assignments");
+        assignments=(data.assignments || []).filter(a=>a.teacherName);
+        renderAssignments();
+        populateAssignmentSelects();
+    } catch(error) {
+        $("assignmentList").innerHTML="";
+        $("assignmentList").append(makeText("div","empty",error.message));
+    }
+}
+
+function populateAssignmentSelects() {
+    ["submissionAssignment","similarityAssignment"].forEach(id=>{
+        const select=$(id);
+        const old=select.value;
+        select.innerHTML="";
+        select.append(new Option("Choose an assignment",""));
+        assignments.forEach(a=>select.append(new Option(a.title,a.id)));
+        if(assignments.some(a=>String(a.id)===old)) select.value=old;
+    });
+    $("assignmentCount").textContent=assignments.length;
+}
+
+function renderAssignments() {
+    const list=$("assignmentList");
+    list.innerHTML="";
+    if(!assignments.length) {
+        list.append(makeText("div","empty","No assignments created yet."));
+        $("overviewAssignments").innerHTML="";
+        $("overviewAssignments").append(makeText("div","empty","Create your first assignment to get started."));
+        return;
+    }
+
+    assignments.forEach(a=>{
+        const card=document.createElement("article");
+        card.className="assignment-card";
+        const top=document.createElement("div");
+        top.className="card-top";
+        const info=document.createElement("div");
+        info.append(makeText("div","card-title",a.title));
+        info.append(makeText("p","muted",a.description || "No description provided."));
+        info.append(makeText("p","muted","Due date: "+dateFormat(a.dueDate)));
+        top.append(info,makeText("span","pill","Assignment"));
+        card.append(top);
+
+        const actions=document.createElement("div");
+        actions.className="card-actions";
+        const review=document.createElement("button");
+        review.className="btn primary";
+        review.textContent="View Submissions";
+        review.onclick=()=>{
+            showPage("submissions");
+            $("submissionAssignment").value=a.id;
+            loadSubmissions(a.id);
+        };
+        actions.append(review);
+        card.append(actions);
+        list.append(card);
+    });
+
+    const overview=$("overviewAssignments");
+    overview.innerHTML="";
+    assignments.slice(0,5).forEach(a=>{
+        const item=document.createElement("div");
+        item.className="assignment-card";
+        item.append(makeText("div","card-title",a.title));
+        item.append(makeText("p","muted","Due: "+dateFormat(a.dueDate)));
+        overview.append(item);
+    });
+}
+
+$("submissionAssignment").addEventListener("change",e=>{
+    if(e.target.value) loadSubmissions(e.target.value);
+    else $("submissionList").innerHTML='<div class="empty">Select an assignment to see submissions.</div>';
+});
+
+async function loadSubmissions(id) {
+    $("submissionList").innerHTML='<div class="empty">Loading submissions...</div>';
+    $("submissionMessage").textContent="";
+    try {
+        const data=await api(`/api/assignments/${encodeURIComponent(id)}/submissions`);
+        const list=$("submissionList");
+        list.innerHTML="";
+        const submissions=data.submissions || [];
+        if(!submissions.length) {
+            list.append(makeText("div","empty","No submissions received for this assignment yet."));
+            return;
+        }
+
+        submissions.forEach(s=>{
+            const card=document.createElement("article");
+            card.className="submission-card";
+            const top=document.createElement("div");
+            top.className="card-top";
+            const info=document.createElement("div");
+            info.append(makeText("div","card-title",s.studentName || "Student"));
+            info.append(makeText("p","muted",s.studentEmail || ""));
+            info.append(makeText("p","muted","Submitted: "+dateFormat(s.submittedAt)));
+            info.append(makeText("p","muted","File: "+(s.fileName || "No file attached")));
+            top.append(info,makeText("span","pill",s.feedback ? "Reviewed" : "Needs review"));
+            card.append(top);
+
+            const actions=document.createElement("div");
+            actions.className="card-actions";
+            if(s.fileName) {
+                const download=document.createElement("button");
+                download.className="btn secondary";
+                download.textContent="↓ Download File";
+                download.onclick=()=>window.location.href=`/api/submissions/${encodeURIComponent(s.id)}/download`;
+                actions.append(download);
+            }
+            card.append(actions);
+
+            const review=document.createElement("div");
+            review.className="review-box";
+            const textarea=document.createElement("textarea");
+            textarea.maxLength=1000;
+            textarea.placeholder="Write feedback for this student...";
+            textarea.value=s.feedback || "";
+            const save=document.createElement("button");
+            save.className="btn primary";
+            save.textContent="Save Feedback";
+            save.onclick=async()=>{
+                save.disabled=true;
+                try {
+                    const result=await api(`/api/submissions/${encodeURIComponent(s.id)}/feedback`,{
+                        method:"PATCH",
+                        body:JSON.stringify({feedback:textarea.value.trim()})
+                    });
+                    $("submissionMessage").className="message success";
+                    $("submissionMessage").textContent=result.message || "Feedback saved.";
+                    await Promise.allSettled([loadSubmissions(id),loadAnalytics()]);
+                } catch(error) {
+                    $("submissionMessage").className="message error";
+                    $("submissionMessage").textContent=error.message;
+                    save.disabled=false;
+                }
+            };
+            review.append(textarea,save);
+            card.append(review);
+            list.append(card);
+        });
+    } catch(error) {
+        $("submissionList").innerHTML="";
+        $("submissionList").append(makeText("div","empty",error.message));
+    }
+}
+
+async function loadAnalytics() {
+    try {
+        const data=await api("/api/teacher/analytics");
+        const o=data.overview || {};
+        $("totalAssignments").textContent=o.totalAssignments ?? 0;
+        $("totalStudents").textContent=o.totalStudents ?? 0;
+        $("totalSubmissions").textContent=o.totalSubmissions ?? 0;
+        $("pendingSubmissions").textContent=o.pendingSubmissions ?? 0;
+        $("completionRate").textContent=(o.completionRate ?? 0)+"%";
+        $("analyticsAssignments").textContent=o.totalAssignments ?? 0;
+        $("analyticsSubmissions").textContent=o.totalSubmissions ?? 0;
+        $("analyticsPending").textContent=o.pendingSubmissions ?? 0;
+
+        const body=$("analyticsTable");
+        body.innerHTML="";
+        const rows=data.assignments || [];
+        if(!rows.length) {
+            const tr=document.createElement("tr");
+            const td=makeText("td","","No assignment data available.");
+            td.colSpan=4;tr.append(td);body.append(tr);
+        }
+        rows.forEach(a=>{
+            const tr=document.createElement("tr");
+            [a.title,a.submissionCount,a.pendingCount,a.feedbackCount].forEach(value=>tr.append(makeText("td","",value)));
+            body.append(tr);
+        });
+    } catch(error) {
+        $("overviewMessage").className="message error";
+        $("overviewMessage").textContent=error.message;
+    }
+}
+
+$("checkSimilarity").addEventListener("click",async()=>{
+    const id=$("similarityAssignment").value;
+    if(!id) {
+        $("similarityMessage").className="message error";
+        $("similarityMessage").textContent="Please select an assignment first.";
+        return;
+    }
+    const button=$("checkSimilarity");
+    button.disabled=true;
+    $("similarityMessage").textContent="Comparing submissions...";
+    $("similarityResults").innerHTML="";
+    try {
+        const data=await api(`/api/assignments/${encodeURIComponent(id)}/similarity`);
+        $("similarityMessage").className="message success";
+        $("similarityMessage").textContent=`Results for: ${data.assignment || "Selected assignment"}`;
+        const results=data.comparisons || [];
+        if(!results.length) {
+            $("similarityResults").append(makeText("div","empty","Not enough readable submissions to compare."));
+        }
+        results.forEach(item=>{
+            const card=document.createElement("div");
+            card.className="submission-card";
+            const top=document.createElement("div");
+            top.className="card-top";
+            top.append(makeText("div","card-title",`${item.studentA} vs ${item.studentB}`));
+            top.append(makeText("span","pill",`${item.similarity}% similarity`));
+            card.append(top);
+            card.append(makeText("p","muted",item.indicator));
+            $("similarityResults").append(card);
+        });
+        if(data.note) $("similarityMessage").textContent+=" — "+data.note;
+    } catch(error) {
+        $("similarityMessage").className="message error";
+        $("similarityMessage").textContent=error.message;
+    } finally {
+        button.disabled=false;
+    }
+});
+
+$("logoutButton").addEventListener("click",async()=>{
+    $("logoutButton").disabled=true;
+    try {
+        await fetch("/api/logout",{method:"POST",credentials:"same-origin"});
+    } finally {
+        location.replace("/login.html");
+    }
+});
+
+initialise();
+</script>
+</body>
+</html>
